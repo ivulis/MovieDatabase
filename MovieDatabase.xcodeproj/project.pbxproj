@@ -23,6 +23,7 @@
 		A2A1659D2A1D034A00A144D3 /* BounceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A1659C2A1D034A00A144D3 /* BounceButton.swift */; };
 		A2A1659F2A1D142B00A144D3 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A1659E2A1D142B00A144D3 /* WebViewController.swift */; };
 		A2A165A12A1D175D00A144D3 /* Trailers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A165A02A1D175D00A144D3 /* Trailers.swift */; };
+		A2E32B272A1D349700B67CC5 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E32B262A1D349700B67CC5 /* Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		A2A1659C2A1D034A00A144D3 /* BounceButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BounceButton.swift; sourceTree = "<group>"; };
 		A2A1659E2A1D142B00A144D3 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		A2A165A02A1D175D00A144D3 /* Trailers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trailers.swift; sourceTree = "<group>"; };
+		A2E32B262A1D349700B67CC5 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				A2A165812A1BBFC000A144D3 /* AppDelegate */,
+				A2E32B252A1D346500B67CC5 /* Extension */,
 				A2A1659B2A1D030B00A144D3 /* ExtraResource */,
 				A2A165872A1BC3FD00A144D3 /* NetworkManager */,
 				A2A165842A1BBFFC00A144D3 /* Model */,
@@ -142,6 +145,14 @@
 				A2A1659C2A1D034A00A144D3 /* BounceButton.swift */,
 			);
 			path = ExtraResource;
+			sourceTree = "<group>";
+		};
+		A2E32B252A1D346500B67CC5 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				A2E32B262A1D349700B67CC5 /* Extension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,6 +241,7 @@
 				A2A165982A1CABE100A144D3 /* MovieDetailViewController.swift in Sources */,
 				A2A1656B2A155F6F00A144D3 /* AppDelegate.swift in Sources */,
 				A2A1656D2A155F6F00A144D3 /* SceneDelegate.swift in Sources */,
+				A2E32B272A1D349700B67CC5 /* Extension.swift in Sources */,
 				A2A165752A155F6F00A144D3 /* MovieDatabase.xcdatamodeld in Sources */,
 				A2A1659A2A1CB23400A144D3 /* MovieDetails.swift in Sources */,
 				A2A165A12A1D175D00A144D3 /* Trailers.swift in Sources */,

@@ -61,7 +61,6 @@ class MovieDetailViewController: UIViewController {
     
 
     // MARK: - Navigation
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destination: WebViewController = segue.destination as! WebViewController
         destination.urlString = NetworkManager.youtubeUrl.appending(trailerKey)

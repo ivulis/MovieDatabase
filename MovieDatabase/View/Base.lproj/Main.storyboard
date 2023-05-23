@@ -113,7 +113,14 @@
                             <constraint firstItem="8ho-1O-HWW" firstAttribute="leading" secondItem="OLL-65-jy8" secondAttribute="leading" id="vX8-FZ-wAV"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Popular movies" id="F1S-zi-hTf"/>
+                    <navigationItem key="navigationItem" title="Popular movies" id="F1S-zi-hTf">
+                        <barButtonItem key="rightBarButtonItem" image="gearshape.fill" catalog="system" id="ozR-R6-Ib5">
+                            <color key="tintColor" systemColor="systemYellowColor"/>
+                            <connections>
+                                <action selector="filterButtonTapped:" destination="bHH-ll-K8v" id="AaS-ir-jQQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="popularMoviesTableView" destination="8ho-1O-HWW" id="jEN-mN-xWv"/>
                     </connections>
@@ -352,6 +359,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="gearshape.fill" catalog="system" width="128" height="123"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

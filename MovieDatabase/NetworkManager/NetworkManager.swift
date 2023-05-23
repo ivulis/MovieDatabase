@@ -11,7 +11,8 @@ class NetworkManager {
     
     static let api = "6d86068be3d5562159db9c1da4fd14d4"
     static let popularMoviesUrl = "https://api.themoviedb.org/3/movie/popular?api_key=\(api)"
-    static let upcomingMoviesUrl = "https://api.themoviedb.org/3/movie/upcoming?api_key=\(api)"
+    static let topRatedMoviesUrl = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(api)"
+    static let upcomingMoviesUrl = "https://api.themoviedb.org/3/movie/upcoming?&primary_release_date.gte=2023-05-26&api_key=\(api)"
     static let posterUrl = "https://image.tmdb.org/t/p/w500/"
     static let youtubeUrl = "https://www.youtube.com/watch?v="
     
