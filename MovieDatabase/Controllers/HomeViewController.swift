@@ -13,7 +13,7 @@ class HomeViewController: UIViewController {
     private var movieListUrl: String = NetworkManager.popularMoviesUrl
     private var movies: [Movie] = []
 
-    @IBOutlet weak var popularMoviesTableView: UITableView!
+    @IBOutlet weak var homeTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +54,7 @@ class HomeViewController: UIViewController {
             self.movies = movies.results ?? []
             dump(self.movies)
             DispatchQueue.main.async {
-                self.popularMoviesTableView.reloadData()
+                self.homeTableView.reloadData()
                 //self.activityIndicator(animated: false)
             }
         }
