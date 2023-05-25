@@ -11,7 +11,8 @@ class WatchlistTableViewCell: UITableViewCell {
 
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var releaseYearRuntimeLabel: UILabel!
-    @IBOutlet weak var ratingReleaseDateLabel: UILabel!
+    @IBOutlet weak var releaseDateLabel: UILabel!
+    @IBOutlet weak var runtimeLabel: UILabel!
+    @IBOutlet weak var ratingLabel: UILabel!
     
 }

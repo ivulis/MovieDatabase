@@ -11,6 +11,7 @@
 		A2779FF22A1DEA5C00390C99 /* WatchlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2779FF12A1DEA5C00390C99 /* WatchlistViewController.swift */; };
 		A2779FF42A1DF48E00390C99 /* WatchlistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2779FF32A1DF48E00390C99 /* WatchlistTableViewCell.swift */; };
 		A2779FF62A1E2F3E00390C99 /* EmptyTableViewPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2779FF52A1E2F3E00390C99 /* EmptyTableViewPlaceholder.swift */; };
+		A2A06A1E2A1F40A500956896 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A06A1D2A1F40A500956896 /* Constants.swift */; };
 		A2A1656B2A155F6F00A144D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A1656A2A155F6F00A144D3 /* AppDelegate.swift */; };
 		A2A1656D2A155F6F00A144D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A1656C2A155F6F00A144D3 /* SceneDelegate.swift */; };
 		A2A165722A155F6F00A144D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2A165702A155F6F00A144D3 /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 		A2779FF12A1DEA5C00390C99 /* WatchlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistViewController.swift; sourceTree = "<group>"; };
 		A2779FF32A1DF48E00390C99 /* WatchlistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistTableViewCell.swift; sourceTree = "<group>"; };
 		A2779FF52A1E2F3E00390C99 /* EmptyTableViewPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyTableViewPlaceholder.swift; sourceTree = "<group>"; };
+		A2A06A1D2A1F40A500956896 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A2A165672A155F6F00A144D3 /* MovieDatabase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieDatabase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2A1656A2A155F6F00A144D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2A1656C2A155F6F00A144D3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -67,6 +69,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A2A06A1F2A1F49E900956896 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A2A06A1D2A1F40A500956896 /* Constants.swift */,
+				A2779FF52A1E2F3E00390C99 /* EmptyTableViewPlaceholder.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		A2A1655E2A155F6F00A144D3 = {
 			isa = PBXGroup;
 			children = (
@@ -90,7 +101,8 @@
 				A2E32B252A1D346500B67CC5 /* Extension */,
 				A2A1659B2A1D030B00A144D3 /* ExtraResource */,
 				A2A165872A1BC3FD00A144D3 /* NetworkManager */,
-				A2A165842A1BBFFC00A144D3 /* Model */,
+				A2A06A1F2A1F49E900956896 /* Utils */,
+				A2A165842A1BBFFC00A144D3 /* Models */,
 				A2A165832A1BBFEF00A144D3 /* View */,
 				A2A165822A1BBFDB00A144D3 /* Controllers */,
 				A2A165762A155F7100A144D3 /* Assets.xcassets */,
@@ -132,14 +144,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		A2A165842A1BBFFC00A144D3 /* Model */ = {
+		A2A165842A1BBFFC00A144D3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				A2A165992A1CB23400A144D3 /* MovieDetails.swift */,
 				A2A165902A1BF44700A144D3 /* Movies.swift */,
 				A2A165A02A1D175D00A144D3 /* Trailers.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		A2A165872A1BC3FD00A144D3 /* NetworkManager */ = {
@@ -162,7 +174,6 @@
 			isa = PBXGroup;
 			children = (
 				A2E32B262A1D349700B67CC5 /* Extensions.swift */,
-				A2779FF52A1E2F3E00390C99 /* EmptyTableViewPlaceholder.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -261,6 +272,7 @@
 				A2779FF42A1DF48E00390C99 /* WatchlistTableViewCell.swift in Sources */,
 				A2A1659A2A1CB23400A144D3 /* MovieDetails.swift in Sources */,
 				A2A165A12A1D175D00A144D3 /* Trailers.swift in Sources */,
+				A2A06A1E2A1F40A500956896 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

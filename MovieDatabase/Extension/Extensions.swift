@@ -18,15 +18,6 @@ extension UIViewController {
         }
     }
     
-    func basicActionAlert(title: String?, message: String?) {
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive))
-            
-            self.present(alert, animated: true)
-        }
-    }
-    
     func activityIndicator(activityIndicatorView: UIActivityIndicatorView, animated: Bool) {
         DispatchQueue.main.async {
             if animated {
@@ -38,18 +29,20 @@ extension UIViewController {
             }
         }
     }
-    
-    func minutesToHoursAndMinutes(_ minutes: Int?) -> String {
-        if minutes != 0 {
-            guard let minutes = minutes else { return "" }
-            return "\(minutes / 60)h \(minutes % 60)m"
-        }else{
-            return "Runtime unknown"
-        }
+}
+
+extension Optional where Wrapped == Double  {
+
+    var stringValue: String {
+        guard let value = self else { return "No Value Provided" }
+        return String(format: "%.1f", value)
     }
+}
+
+extension Optional where Wrapped == String {
     
-    func convertToLongDate(_ releaseDate: String?) -> String {
-        guard let date = releaseDate else { return "" }
+    var longDateString: String {
+        guard let date = self else { return "No Value Provided" }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -60,10 +53,27 @@ extension UIViewController {
         
         return "\(dateFormatter.string(from: dateObj))"
     }
+    
+    var stringValue: String {
+        guard let value = self else { return "No Value Provided" }
+        return value
+    }
 }
 
-extension Double {
-    var stringValue:String {
-        return "\(self)"
+extension Optional where Wrapped == Int {
+    
+    var hoursAndMinutes: String {
+        guard let minutes = self else { return "No Value Provided" }
+        
+        if minutes != 0 {
+            return "\(minutes / 60)h \(minutes % 60)m"
+        }else{
+            return "Runtime unknown"
+        }
+    }
+    
+    var stringValue: String {
+        guard let value = self else { return "No Value Provided" }
+        return "\(value)"
     }
 }

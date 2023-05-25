@@ -19,6 +19,8 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var runtimeLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
     
+    @IBOutlet weak var watchTrailerButton: BounceButton!
+    
     private var movie: MovieDetails = MovieDetails()
     private var trailerKey: String = String()
     var movieId: String = String()
@@ -39,13 +41,13 @@ class MovieDetailViewController: UIViewController {
     @IBAction func addToWatchlistButtonTapped(_ sender: Any) {
         
         let newMovie = MovieItems(context: self.context!)
-        newMovie.id = "\(movie.id ?? 0)"
+        newMovie.id = movie.id.stringValue
         newMovie.title = movie.title
-        newMovie.releaseDate = convertToLongDate(movie.releaseDate)
-        newMovie.runtime = "\(minutesToHoursAndMinutes(movie.runtime))"
-        newMovie.rating = String(format: "%.1f", movie.voteAverage ?? 0.0)
-        if movie.posterPath != nil {
-            newMovie.poster = "\(NetworkManager.posterUrl)\(movie.posterPath ?? NetworkManager.youtubeDefaultVideoKey)"
+        newMovie.releaseDate = movie.releaseDate.longDateString
+        newMovie.runtime = movie.runtime.hoursAndMinutes
+        newMovie.rating = movie.voteAverage.stringValue
+        if let posterPath = movie.posterPath {
+            newMovie.poster = Constants.API.posterUrl + posterPath
         }
         
         self.watchlistMovies.append(newMovie)
@@ -71,29 +73,43 @@ class MovieDetailViewController: UIViewController {
     }
     
     private func getMovieTrailer() {
-        NetworkManager.fetchMovieTrailer(movieId: movieId) { trailer in
-            self.trailerKey = trailer.results?.first(where: { trl in
-                trl.type == "Trailer"
-            })?.key ?? NetworkManager.youtubeDefaultVideoKey
+        NetworkManager.fetchMovieTrailer(movieId: movieId) { fetchedTrailers in
+            guard let trailers = fetchedTrailers.results else {return}
+            if !trailers.isEmpty {
+                self.trailerKey = trailers.first(where: { trl in
+                    trl.type == "Trailer"
+                })?.key ?? ""
+            }else{
+                DispatchQueue.main.async {
+                    self.watchTrailerButton.isHidden = true
+                }
+            }
         }
     }
     
     func updateDetails() {
         titleLabel.text = movie.title
-        posterImageView.sd_setImage(with: URL(string: NetworkManager.posterUrl.appending(movie.posterPath ?? "")))
+        if let poster = movie.posterPath {
+            posterImageView.sd_setImage(with: URL(string: Constants.API.posterUrl.appending(poster)))
+        }else{
+            posterImageView.sd_setImage(with: URL(string: Constants.Image.posterPlaceholder))
+        }
         movie.genres?.forEach { genreLabel.text?.append("\($0.name ?? ""), ") }
         genreLabel.text?.removeLast(2)
-        releaseDateLabel.text = "📅 \(convertToLongDate(movie.releaseDate))"
-        runtimeLabel.text = "🎬 \(minutesToHoursAndMinutes(movie.runtime))"
-        //ratingLabel.text?.append("\(movie.voteAverage ?? 0)")
-        ratingLabel.text = "⭐ \(String(format: "%.1f", movie.voteAverage ?? 0.0))"
-        overviewLabel.text = movie.overview
+        releaseDateLabel.text = Constants.Icon.releaseDate + movie.releaseDate.longDateString
+        runtimeLabel.text = Constants.Icon.runtime + movie.runtime.hoursAndMinutes
+        if movie.voteAverage != 0.0 {
+            ratingLabel.isHidden = false
+            ratingLabel.text = Constants.Icon.rating + movie.voteAverage.stringValue
+        }else{
+            ratingLabel.isHidden = true
+        }
+        overviewLabel.text = movie.overview != "" ? movie.overview! : "Plot unknown"
     }
     
-
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destination: WebViewController = segue.destination as! WebViewController
-        destination.urlString = NetworkManager.youtubeUrl.appending(trailerKey)
+        destination.urlString = Constants.API.trailerUrl.appending(trailerKey)
     }
 }

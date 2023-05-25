@@ -177,7 +177,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HYb-PS-ESO">
                                                             <rect key="frame" x="0.0" y="29.666666666666664" width="220" height="60.999999999999993"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="4Oa-yV-NvJ"/>
+                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="4Oa-yV-NvJ"/>
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="220" id="wgt-Av-pQC"/>
                                                             </constraints>
                                                             <string key="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
@@ -269,7 +269,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="LNu-9m-4E0">
-                                                    <rect key="frame" x="128" y="33" width="245" height="106"/>
+                                                    <rect key="frame" x="128" y="14" width="245" height="144"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBc-A5-45V">
                                                             <rect key="frame" x="0.0" y="0.0" width="245" height="30"/>
@@ -291,8 +291,18 @@
                                                             <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P6h-TX-R0V">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="46F-DJ-Xi0">
                                                             <rect key="frame" x="0.0" y="76" width="245" height="30"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="30" id="KEt-Vd-e4d"/>
+                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="245" id="SHv-j3-zpt"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P6h-TX-R0V">
+                                                            <rect key="frame" x="0.0" y="114" width="245" height="30"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="30" id="0l9-iy-XNW"/>
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="245" id="xMa-yu-Smx"/>
@@ -321,8 +331,9 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="posterImageView" destination="YhW-LT-yom" id="eDS-L6-jr8"/>
-                                            <outlet property="ratingReleaseDateLabel" destination="P6h-TX-R0V" id="ePD-zY-B6z"/>
-                                            <outlet property="releaseYearRuntimeLabel" destination="bA0-GP-Gzp" id="Ru8-X9-TLA"/>
+                                            <outlet property="ratingLabel" destination="P6h-TX-R0V" id="ePD-zY-B6z"/>
+                                            <outlet property="releaseDateLabel" destination="bA0-GP-Gzp" id="Ru8-X9-TLA"/>
+                                            <outlet property="runtimeLabel" destination="46F-DJ-Xi0" id="Yju-5B-jt1"/>
                                             <outlet property="titleLabel" destination="dBc-A5-45V" id="6Xr-l7-tgV"/>
                                         </connections>
                                     </tableViewCell>
@@ -510,6 +521,7 @@
                         <outlet property="releaseDateLabel" destination="72N-uh-3JT" id="rOz-Oi-MQC"/>
                         <outlet property="runtimeLabel" destination="GFj-G5-AaQ" id="3Oh-VC-0uo"/>
                         <outlet property="titleLabel" destination="76h-vo-1v0" id="JzF-xB-Byj"/>
+                        <outlet property="watchTrailerButton" destination="xDl-UT-73I" id="TtQ-h4-CZ6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BaS-Ug-7BJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

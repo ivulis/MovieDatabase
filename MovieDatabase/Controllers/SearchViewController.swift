@@ -24,7 +24,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     //MARK: - Create search bar
     func createSearchBar() {
         navigationItem.searchController = searchVC
-        searchVC.searchBar.placeholder = "Tap here to search by keyword"
+        searchVC.searchBar.placeholder = "Tap here to search movies by keyword"
         searchVC.searchBar.delegate = self
     }
     
@@ -45,7 +45,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     private func getMovies(keyword: String) {
         
-        NetworkManager.fetchMovies(url: "https://api.themoviedb.org/3/search/movie?query=\(keyword)&api_key=\(NetworkManager.api)") { movies in
+        NetworkManager.fetchMoviesByKeyword(keyword: keyword) { movies in
             self.movies = movies.results ?? []
             DispatchQueue.main.async {
                 self.searchTableView.reloadData()
@@ -66,17 +66,39 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         
         let movie = movies[indexPath.row]
         cell.titleLabel.text = movie.title
-        cell.overviewLabel.text = "📝 \(movie.overview ?? "")"
-        cell.ratingLabel.text = "⭐ \(movie.voteAverage ?? 0)"
-        cell.releaseDateLabel.text = "📅 \(movie.releaseDate ?? "")"
-        cell.posterImageView.sd_setImage(with: URL(string: NetworkManager.posterUrl.appending(movie.posterPath ?? "")))
+        cell.overviewLabel.text = Constants.Icon.overview + (movie.overview != "" ? movie.overview! : "Plot unknown")
+        if movie.voteAverage != 0.0 {
+            cell.ratingLabel.isHidden = false
+            cell.ratingLabel.text = Constants.Icon.rating + movie.voteAverage.stringValue
+        }else{
+            cell.ratingLabel.isHidden = true
+        }
+        
+        if movie.releaseDate != "" {
+            cell.releaseDateLabel.isHidden = false
+            cell.releaseDateLabel.text = Constants.Icon.releaseDate + movie.releaseDate.longDateString
+        }else{
+            cell.releaseDateLabel.isHidden = true
+        }
+        if let poster = movie.posterPath {
+            cell.posterImageView.sd_setImage(with: URL(string: Constants.API.posterUrl.appending(poster)))
+        }else{
+            cell.posterImageView.sd_setImage(with: URL(string: Constants.Image.posterPlaceholder))
+        }
         cell.selectionStyle = .none
         
         return cell
     }//cellForRowAt
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 210
+        return Constants.RowHeight.searchTableViewCell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        UIView.animate(withDuration: 0.5) {
+            cell.transform = CGAffineTransform.identity
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -88,5 +110,5 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         vc.movieId = "\(movie.id ?? 0)"
         
         navigationController?.pushViewController(vc, animated: true)
-    }
+    }//didSelectRowAt
 }

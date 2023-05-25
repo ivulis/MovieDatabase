@@ -9,14 +9,6 @@ import Foundation
 
 class NetworkManager {
     
-    static let api = "6d86068be3d5562159db9c1da4fd14d4"
-    static let popularMoviesUrl = "https://api.themoviedb.org/3/movie/popular?api_key=\(api)"
-    static let topRatedMoviesUrl = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(api)"
-    static let upcomingMoviesUrl = "https://api.themoviedb.org/3/movie/upcoming?&primary_release_date.gte=2023-05-26&api_key=\(api)"
-    static let posterUrl = "https://image.tmdb.org/t/p/w500/"
-    static let youtubeUrl = "https://www.youtube.com/watch?v="
-    static let youtubeDefaultVideoKey = "dQw4w9WgXcQ"
-    
     static func fetchMovies(url: String, completion: @escaping (Movies) -> () ) {
         
         guard let url = URL(string: url) else { return }
@@ -47,9 +39,39 @@ class NetworkManager {
         }.resume()
     }//fetchMovies
     
+    static func fetchMoviesByKeyword(keyword: String, completion: @escaping (Movies) -> () ) {
+        
+        guard let url = URL(string: "https://api.themoviedb.org/3/search/movie?query=\(keyword)&api_key=\(Constants.API.apiKey)") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let config = URLSessionConfiguration.default
+        config.waitsForConnectivity = true
+        
+        URLSession(configuration: config).dataTask(with: request) { (data, response, err ) in
+            
+            guard err == nil else {
+                print("Error: ", err!)
+                return
+            }
+            
+            guard let data = data else { return }
+            
+            
+            do {
+                let jsonData = try JSONDecoder().decode(Movies.self, from: data)
+                completion(jsonData)
+            }catch{
+                print("Error: ", error)
+            }
+            
+        }.resume()
+    }//fetchMoviesByKeyword
+    
     static func fetchMovieDetails(movieId: String, completion: @escaping (MovieDetails) -> () ) {
         
-        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieId)?api_key=\(api)") else { return }
+        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieId)?api_key=\(Constants.API.apiKey)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -79,7 +101,7 @@ class NetworkManager {
     
     static func fetchMovieTrailer(movieId: String, completion: @escaping (Trailers) -> () ) {
         
-        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieId)/videos?api_key=\(api)") else { return }
+        guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieId)/videos?api_key=\(Constants.API.apiKey)") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

@@ -10,7 +10,7 @@ import SDWebImage
 
 class HomeViewController: UIViewController {
     
-    private var movieListUrl: String = NetworkManager.popularMoviesUrl
+    private var movieListUrl: String = Constants.API.popularMoviesUrl
     private var movies: [Movie] = []
 
     @IBOutlet weak var homeTableView: UITableView!
@@ -34,17 +34,17 @@ class HomeViewController: UIViewController {
     private func changeMovieList(action: UIAlertAction) {
         switch action.title {
         case "Popular":
-            navigationItem.title = "Popular Movies"
-            movieListUrl = NetworkManager.popularMoviesUrl
+            navigationItem.title = Constants.MovieList.popular
+            movieListUrl = Constants.API.popularMoviesUrl
         case "Top Rated":
-            navigationItem.title = "Top Rated Movies"
-            movieListUrl = NetworkManager.topRatedMoviesUrl
+            navigationItem.title = Constants.MovieList.topRated
+            movieListUrl = Constants.API.topRatedMoviesUrl
         case "Upcoming":
-            navigationItem.title = "Upcoming Movies"
-            movieListUrl = NetworkManager.upcomingMoviesUrl
+            navigationItem.title = Constants.MovieList.upcoming
+            movieListUrl = Constants.API.upcomingMoviesUrl
         default:
-            navigationItem.title = "Popular Movies"
-            movieListUrl = NetworkManager.popularMoviesUrl
+            navigationItem.title = Constants.MovieList.popular
+            movieListUrl = Constants.API.popularMoviesUrl
         }
         getMovies(url: movieListUrl)
     }
@@ -74,17 +74,22 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         
         let movie = movies[indexPath.row]
         cell.titleLabel.text = movie.title
-        cell.overviewLabel.text = "📝 \(movie.overview ?? "")"
-        cell.ratingLabel.text = "⭐ \(movie.voteAverage ?? 0)"
-        cell.releaseDateLabel.text = "📅 \(convertToLongDate(movie.releaseDate))"
-        cell.posterImageView.sd_setImage(with: URL(string: NetworkManager.posterUrl.appending(movie.posterPath ?? "")))
+        cell.overviewLabel.text = Constants.Icon.overview + (movie.overview != "" ? movie.overview! : "Plot unknown")
+        if movie.voteAverage != 0.0 {
+            cell.ratingLabel.isHidden = false
+            cell.ratingLabel.text = Constants.Icon.rating + movie.voteAverage.stringValue
+        }else{
+            cell.ratingLabel.isHidden = true
+        }
+        cell.releaseDateLabel.text = Constants.Icon.releaseDate + movie.releaseDate.longDateString
+        cell.posterImageView.sd_setImage(with: URL(string: Constants.API.posterUrl.appending(movie.posterPath ?? "")))
         cell.selectionStyle = .none
         
         return cell
     }//cellForRowAt
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 210
+        return Constants.RowHeight.homeTableViewCell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -100,7 +105,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         guard let vc = storyboard.instantiateViewController(withIdentifier: "MovieDetailViewController") as? MovieDetailViewController else { return }
         
         let movie = movies[indexPath.row]
-        vc.movieId = "\(movie.id ?? 0)"
+        vc.movieId = movie.id.stringValue
         
         navigationController?.pushViewController(vc, animated: true)
     }//didSelectRowAt

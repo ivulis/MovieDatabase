@@ -94,20 +94,35 @@ extension WatchlistViewController: UITableViewDelegate, UITableViewDataSource {
         
         let movie = watchlistMovies[indexPath.row]
         cell.titleLabel.text = movie.title
-        cell.releaseYearRuntimeLabel.text = "📅 \(movie.releaseDate ?? "")   🎬 \(movie.runtime ?? "")"
+        cell.releaseDateLabel.text = Constants.Icon.releaseDate + movie.releaseDate.stringValue
+        cell.runtimeLabel.text = Constants.Icon.runtime + movie.runtime.stringValue
         if movie.rating != "0.0" {
-            cell.ratingReleaseDateLabel.text = "⭐ \(movie.rating ?? "")"
+            cell.ratingLabel.isHidden = false
+            cell.ratingLabel.text = Constants.Icon.rating + movie.rating.stringValue
         }else {
-            cell.ratingReleaseDateLabel.text = "Coming \(movie.releaseDate ?? "")"
+            cell.ratingLabel.isHidden = true
         }
-        cell.posterImageView.sd_setImage(with: URL(string: movie.poster ?? ""))
+        if let poster = movie.poster {
+            cell.posterImageView.sd_setImage(with: URL(string: poster))
+        }else{
+            cell.posterImageView.sd_setImage(with: URL(string: Constants.Image.posterPlaceholder))
+        }
+        
+        //cell.posterImageView.sd_setImage(with: URL(string: movie.poster ?? ""))
         cell.selectionStyle = .none
         
         return cell
     }//cellForRowAt
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 172
+        return Constants.RowHeight.watchlistTableViewCell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        UIView.animate(withDuration: 0.5) {
+            cell.transform = CGAffineTransform.identity
+        }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
