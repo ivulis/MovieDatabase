@@ -19,6 +19,8 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var runtimeLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
     
+    
+    @IBOutlet weak var addToWatchlistButton: BounceButton!
     @IBOutlet weak var watchTrailerButton: BounceButton!
     
     private var movie: MovieDetails = MovieDetails()
@@ -34,30 +36,49 @@ class MovieDetailViewController: UIViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         context = appDelegate.persistentContainer.viewContext
         
+        checkWatchlist()
         getMovieDetails()
         getMovieTrailer()
     }
     
     @IBAction func addToWatchlistButtonTapped(_ sender: Any) {
-        
-        let newMovie = MovieItems(context: self.context!)
-        newMovie.id = movie.id.stringValue
-        newMovie.title = movie.title
-        newMovie.releaseDate = movie.releaseDate.longDateString
-        newMovie.runtime = movie.runtime.hoursAndMinutes
-        newMovie.rating = movie.voteAverage.stringValue
-        if let posterPath = movie.posterPath {
-            newMovie.poster = Constants.API.posterUrl + posterPath
+        if let movie = watchlistMovies.first(where: { $0.id == movieId }) {
+            self.context?.delete(movie)
+            self.saveData(adding: false)
+        }else{
+            let newMovie = MovieItems(context: self.context!)
+            newMovie.id = movie.id.stringValue
+            newMovie.title = movie.title
+            newMovie.releaseDate = movie.releaseDate.longDateString
+            newMovie.runtime = movie.runtime.hoursAndMinutes
+            newMovie.rating = movie.voteAverage.stringValue
+            if let posterPath = movie.posterPath {
+                newMovie.poster = Constants.API.posterUrl + posterPath
+            }
+            
+            self.watchlistMovies.append(newMovie)
+            saveData(adding: true)
         }
-        
-        self.watchlistMovies.append(newMovie)
-        saveData()
+        updateAddToWatchlistButton()
     }
     
-    func saveData() {
+    func saveData(adding: Bool) {
         do {
             try context?.save()
-            basicAlert(title: "Added!", message: "\(movie.title ?? "Unknown title") has been added to your watchlist.")
+            if adding {
+                basicAlert(title: "Added!", message: "\(movie.title.stringValue) has been added to your watchlist.")
+            }else{
+                basicAlert(title: "Removed!", message: "\(movie.title.stringValue) has been removed from your watchlist.")
+            }
+        }catch{
+            print(error)
+        }
+    }
+    
+    func checkWatchlist() {
+        let request: NSFetchRequest<MovieItems> = MovieItems.fetchRequest()
+        do {
+            watchlistMovies = try (context?.fetch(request))!
         }catch{
             print(error)
         }
@@ -105,6 +126,15 @@ class MovieDetailViewController: UIViewController {
             ratingLabel.isHidden = true
         }
         overviewLabel.text = movie.overview != "" ? movie.overview! : "Plot unknown"
+        updateAddToWatchlistButton()
+    }
+    
+    func updateAddToWatchlistButton() {
+        if watchlistMovies.contains(where: { $0.id == movieId }) {
+            changeToAdded(addToWatchlistButton)
+        }else{
+            changeToAdd(addToWatchlistButton)
+        }
     }
     
     // MARK: - Navigation

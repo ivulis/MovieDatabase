@@ -12,6 +12,7 @@ import SDWebImage
 class WatchlistViewController: UIViewController {
     
     @IBOutlet weak var watchlistTableView: UITableView!
+    @IBOutlet weak var emptyWatchlistButton: UIBarButtonItem!
     
     var watchlistMovies: [MovieItems] = []
     var context: NSManagedObjectContext?
@@ -44,8 +45,10 @@ class WatchlistViewController: UIViewController {
         do {
             watchlistMovies = try (context?.fetch(request))!
             if watchlistMovies.count == 0 {
+                emptyWatchlistButton.isEnabled = false
                 watchlistTableView.setEmptyView(title: "You don't have any movies in your watchlist", message: "Your favorited movies will be here")
             }else{
+                emptyWatchlistButton.isEnabled = true
                 watchlistTableView.restore()
             }
         }catch{
@@ -107,8 +110,6 @@ extension WatchlistViewController: UITableViewDelegate, UITableViewDataSource {
         }else{
             cell.posterImageView.sd_setImage(with: URL(string: Constants.Image.posterPlaceholder))
         }
-        
-        //cell.posterImageView.sd_setImage(with: URL(string: movie.poster ?? ""))
         cell.selectionStyle = .none
         
         return cell

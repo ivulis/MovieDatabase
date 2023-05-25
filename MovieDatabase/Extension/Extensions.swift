@@ -29,6 +29,21 @@ extension UIViewController {
             }
         }
     }
+    
+    func changeToAdd(_ button: UIButton) {
+        button.layer.backgroundColor = UIColor.yellow.cgColor
+        button.layer.borderWidth = 0
+        button.setTitle("+ Add to Watchlist", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+    }
+    
+    func changeToAdded(_ button: UIButton) {
+        button.layer.backgroundColor = UIColor.systemGray6.cgColor
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.yellow.cgColor
+        button.setTitle("✓ Added to Watchlist", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+    }
 }
 
 extension Optional where Wrapped == Double  {
