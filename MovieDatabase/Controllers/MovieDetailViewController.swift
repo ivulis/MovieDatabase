@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 import SDWebImage
 
 class MovieDetailViewController: UIViewController {
@@ -22,20 +23,49 @@ class MovieDetailViewController: UIViewController {
     private var trailerKey: String = String()
     var movieId: String = String()
     
+    var watchlistMovies: [MovieItems] = []
+    var context: NSManagedObjectContext?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        context = appDelegate.persistentContainer.viewContext
+        
         getMovieDetails()
         getMovieTrailer()
     }
     
-    private func getMovieDetails() {
-        //activityIndicator(animated: true)
+    @IBAction func addToWatchlistButtonTapped(_ sender: Any) {
         
+        let newMovie = MovieItems(context: self.context!)
+        newMovie.id = "\(movie.id ?? 0)"
+        newMovie.title = movie.title
+        newMovie.releaseDate = convertToLongDate(movie.releaseDate)
+        newMovie.runtime = "\(minutesToHoursAndMinutes(movie.runtime))"
+        newMovie.rating = String(format: "%.1f", movie.voteAverage ?? 0.0)
+        if movie.posterPath != nil {
+            newMovie.poster = "\(NetworkManager.posterUrl)\(movie.posterPath ?? NetworkManager.youtubeDefaultVideoKey)"
+        }
+        
+        self.watchlistMovies.append(newMovie)
+        saveData()
+    }
+    
+    func saveData() {
+        do {
+            try context?.save()
+            basicAlert(title: "Added!", message: "\(movie.title ?? "Unknown title") has been added to your watchlist.")
+        }catch{
+            print(error)
+        }
+    }
+    
+    private func getMovieDetails() {
         NetworkManager.fetchMovieDetails(movieId: movieId) { movie in
             self.movie = movie
             DispatchQueue.main.async {
                 self.updateDetails()
-                //self.activityIndicator(animated: false)
             }
         }
     }
@@ -44,7 +74,7 @@ class MovieDetailViewController: UIViewController {
         NetworkManager.fetchMovieTrailer(movieId: movieId) { trailer in
             self.trailerKey = trailer.results?.first(where: { trl in
                 trl.type == "Trailer"
-            })?.key ?? "dQw4w9WgXcQ"
+            })?.key ?? NetworkManager.youtubeDefaultVideoKey
         }
     }
     
@@ -53,9 +83,10 @@ class MovieDetailViewController: UIViewController {
         posterImageView.sd_setImage(with: URL(string: NetworkManager.posterUrl.appending(movie.posterPath ?? "")))
         movie.genres?.forEach { genreLabel.text?.append("\($0.name ?? ""), ") }
         genreLabel.text?.removeLast(2)
-        releaseDateLabel.text?.append(movie.releaseDate ?? "")
-        runtimeLabel.text?.append("\((movie.runtime ?? 0) / 60)h \((movie.runtime ?? 0) % 60)m")
-        ratingLabel.text?.append("\(movie.voteAverage ?? 0)")
+        releaseDateLabel.text = "📅 \(convertToLongDate(movie.releaseDate))"
+        runtimeLabel.text = "🎬 \(minutesToHoursAndMinutes(movie.runtime))"
+        //ratingLabel.text?.append("\(movie.voteAverage ?? 0)")
+        ratingLabel.text = "⭐ \(String(format: "%.1f", movie.voteAverage ?? 0.0))"
         overviewLabel.text = movie.overview
     }
     

@@ -12,7 +12,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     let searchVC = UISearchController(searchResultsController: nil)
     private var movies: [Movie] = []
-    var keyword = ""
+    var keyword: String = String()
     
     @IBOutlet weak var searchTableView: UITableView!
     
@@ -44,28 +44,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
     
     private func getMovies(keyword: String) {
+        
         NetworkManager.fetchMovies(url: "https://api.themoviedb.org/3/search/movie?query=\(keyword)&api_key=\(NetworkManager.api)") { movies in
-            self.movies.removeAll()
             self.movies = movies.results ?? []
-            dump(self.movies)
             DispatchQueue.main.async {
                 self.searchTableView.reloadData()
-                //self.activityIndicator(animated: false)
             }
         }
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
-}
+}//class
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -86,7 +73,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         
         return cell
-    }
+    }//cellForRowAt
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 210

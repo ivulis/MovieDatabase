@@ -15,6 +15,7 @@ class NetworkManager {
     static let upcomingMoviesUrl = "https://api.themoviedb.org/3/movie/upcoming?&primary_release_date.gte=2023-05-26&api_key=\(api)"
     static let posterUrl = "https://image.tmdb.org/t/p/w500/"
     static let youtubeUrl = "https://www.youtube.com/watch?v="
+    static let youtubeDefaultVideoKey = "dQw4w9WgXcQ"
     
     static func fetchMovies(url: String, completion: @escaping (Movies) -> () ) {
         

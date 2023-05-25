@@ -14,6 +14,8 @@ class HomeViewController: UIViewController {
     private var movies: [Movie] = []
 
     @IBOutlet weak var homeTableView: UITableView!
+    @IBOutlet weak var loadingView: UIActivityIndicatorView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,29 +50,17 @@ class HomeViewController: UIViewController {
     }
     
     private func getMovies(url: String) {
+        self.activityIndicator(activityIndicatorView: self.loadingView, animated: true)
         
         NetworkManager.fetchMovies(url: url) { movies in
-            self.movies.removeAll()
             self.movies = movies.results ?? []
-            dump(self.movies)
             DispatchQueue.main.async {
                 self.homeTableView.reloadData()
-                //self.activityIndicator(animated: false)
+                self.activityIndicator(activityIndicatorView: self.loadingView, animated: false)
             }
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-}
+}//class
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -80,21 +70,28 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as? MovieTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "homeCell", for: indexPath) as? MovieTableViewCell else { return UITableViewCell() }
         
         let movie = movies[indexPath.row]
         cell.titleLabel.text = movie.title
         cell.overviewLabel.text = "📝 \(movie.overview ?? "")"
         cell.ratingLabel.text = "⭐ \(movie.voteAverage ?? 0)"
-        cell.releaseDateLabel.text = "📅 \(movie.releaseDate ?? "")"
+        cell.releaseDateLabel.text = "📅 \(convertToLongDate(movie.releaseDate))"
         cell.posterImageView.sd_setImage(with: URL(string: NetworkManager.posterUrl.appending(movie.posterPath ?? "")))
         cell.selectionStyle = .none
         
         return cell
-    }
+    }//cellForRowAt
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 210
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        UIView.animate(withDuration: 0.5) {
+            cell.transform = CGAffineTransform.identity
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -106,5 +103,5 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         vc.movieId = "\(movie.id ?? 0)"
         
         navigationController?.pushViewController(vc, animated: true)
-    }
+    }//didSelectRowAt
 }
