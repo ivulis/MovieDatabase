@@ -19,10 +19,39 @@ class WatchlistViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         context = appDelegate.persistentContainer.viewContext
         loadCoreData()
+    }
+    
+    private func setupView() {
+        
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender: )))
+        view.addGestureRecognizer(longPressRecognizer)
+    }
+    
+    @objc private func longPressed(sender: UILongPressGestureRecognizer) {
+        if sender.state == UIGestureRecognizer.State.began {
+            let touchPoint = sender.location(in: watchlistTableView)
+            if let indexPath = watchlistTableView.indexPathForRow(at: touchPoint) {
+                markAsWatched(indexPath)
+            }
+        }
+    }
+    
+    func markAsWatched(_ indexPath: IndexPath) {
+        let watchedStatus = watchlistMovies[indexPath.row].watched ? "unwatched" : "watched"
+        
+        let alert = UIAlertController(title: "Mark as \(watchedStatus)?", message: "Do you want to mark this movie as \(watchedStatus)?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
+            self.watchlistMovies[indexPath.row].watched = !self.watchlistMovies[indexPath.row].watched
+            self.saveCoreData()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        present(alert, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,6 +69,11 @@ class WatchlistViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    func countMovies() {
+        let moviesInTable = String(self.watchlistTableView.numberOfRows(inSection: 0))
+        navigationItem.title = "Watchlist(\(moviesInTable))"
+    }
+    
     func loadCoreData() {
         let request: NSFetchRequest<MovieItems> = MovieItems.fetchRequest()
         do {
@@ -55,17 +89,12 @@ class WatchlistViewController: UIViewController {
             print(error)
         }
         watchlistTableView.reloadData()
+        countMovies()
     }
     
     func saveCoreData() {
-        let request: NSFetchRequest<MovieItems> = MovieItems.fetchRequest()
         do {
             try context?.save()
-            if try context?.count(for: request) != 0 {
-                basicAlert(title: "Deleted!", message: "Movie has been successfully deleted from your watchlist.")
-            }else{
-                basicAlert(title: "Emptied!", message: "All movies has been successfully deleted from your watchlist.")
-            }
         }catch{
             print(error)
         }
@@ -78,6 +107,7 @@ class WatchlistViewController: UIViewController {
         
         do {
             try context?.execute(entityRequest)
+            basicAlert(title: "Emptied!", message: "All movies has been successfully deleted from your watchlist.")
             saveCoreData()
         }catch{
             print(error)
@@ -110,7 +140,8 @@ extension WatchlistViewController: UITableViewDelegate, UITableViewDataSource {
         }else{
             cell.posterImageView.sd_setImage(with: URL(string: Constants.Image.posterPlaceholder))
         }
-        cell.selectionStyle = .none
+        cell.accessoryType = movie.watched ? .checkmark : .none
+        cell.tintColor = .yellow
         
         return cell
     }//cellForRowAt
@@ -133,6 +164,7 @@ extension WatchlistViewController: UITableViewDelegate, UITableViewDataSource {
             alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
                 let movie = self.watchlistMovies[indexPath.row]
                 self.context?.delete(movie)
+                self.basicAlert(title: "Deleted!", message: "Movie has been successfully deleted from your watchlist.")
                 self.saveCoreData()
             }))
             self.present(alert, animated: true)

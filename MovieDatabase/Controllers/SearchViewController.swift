@@ -21,23 +21,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         createSearchBar()
     }
     
-    //MARK: - Create search bar
     func createSearchBar() {
         navigationItem.searchController = searchVC
         searchVC.searchBar.placeholder = "Tap here to search movies by keyword"
         searchVC.searchBar.delegate = self
     }
     
-    //MARK: - Search bar enter button
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let keyword = searchBar.text, !keyword.isEmpty else {return}
-        let trimmedKeyword = keyword.filter {!$0.isWhitespace}
-        print(trimmedKeyword)
-        
-        getMovies(keyword: trimmedKeyword)
+        let fixedKeyword = keyword.replacingOccurrences(of: " ", with: "-")
+        getMovies(keyword: fixedKeyword)
     }
     
-    //MARK: - Search bar cancel button
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         movies.removeAll()
         searchTableView.reloadData()
@@ -57,6 +52,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if movies.count == 0 {
+            searchTableView.setEmptyView(title: "No search results", message: "Your search results will be displayed here")
+        } else {
+            tableView.restore()
+        }
         return movies.count
     }
     
@@ -67,6 +67,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let movie = movies[indexPath.row]
         cell.titleLabel.text = movie.title
         cell.overviewLabel.text = Constants.Icon.overview + (movie.overview != "" ? movie.overview! : "Plot unknown")
+        
         if movie.voteAverage != 0.0 {
             cell.ratingLabel.isHidden = false
             cell.ratingLabel.text = Constants.Icon.rating + movie.voteAverage.stringValue
@@ -80,11 +81,13 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         }else{
             cell.releaseDateLabel.isHidden = true
         }
+        
         if let poster = movie.posterPath {
             cell.posterImageView.sd_setImage(with: URL(string: Constants.API.posterUrl.appending(poster)))
         }else{
             cell.posterImageView.sd_setImage(with: URL(string: Constants.Image.posterPlaceholder))
         }
+        
         cell.selectionStyle = .none
         
         return cell

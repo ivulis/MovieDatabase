@@ -277,7 +277,7 @@
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="245" id="Ujy-1i-l0o"/>
                                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="mRO-lI-25Y"/>
                                                             </constraints>
-                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
