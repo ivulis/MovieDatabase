@@ -10,7 +10,9 @@ import CoreData
 import SDWebImage
 
 class MovieDetailViewController: UIViewController {
-
+    
+    @IBOutlet weak var recommendCollectionView: UICollectionView!
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var overviewLabel: UILabel!
@@ -18,12 +20,13 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var runtimeLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
-    
+    @IBOutlet weak var similarMoviesHeaderLabel: UILabel!
     
     @IBOutlet weak var addToWatchlistButton: BounceButton!
     @IBOutlet weak var watchTrailerButton: BounceButton!
     
     private var movie: MovieDetails = MovieDetails()
+    private var similarMovies: [Movie] = []
     private var trailerKey: String = String()
     var movieId: String = String()
     
@@ -39,6 +42,10 @@ class MovieDetailViewController: UIViewController {
         checkWatchlist()
         getMovieTrailer()
         getMovieDetails()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        getSimilarMovies()
     }
     
     @IBAction func addToWatchlistButtonTapped(_ sender: Any) {
@@ -108,6 +115,12 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
+    private func getSimilarMovies() {
+        NetworkManager.fetchSimilarMovies(movieId: movieId) { similarMovies in
+            self.similarMovies = similarMovies.results ?? []
+        }
+    }
+    
     func updateDetails() {
         titleLabel.text = movie.title
         if let poster = movie.posterPath {
@@ -137,9 +150,39 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
-    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destination: WebViewController = segue.destination as! WebViewController
         destination.urlString = Constants.API.trailerUrl.appending(trailerKey)
+    }
+}
+
+extension MovieDetailViewController: UICollectionViewDelegate,UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return similarMovies.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = recommendCollectionView.dequeueReusableCell(withReuseIdentifier: "recommendCell", for: indexPath) as? RecommendCollectionViewCell else { return UICollectionViewCell() }
+        
+        let movie = similarMovies[indexPath.item]
+        if let poster = movie.posterPath {
+            cell.posterImageView.sd_setImage(with: URL(string: Constants.API.posterUrl.appending(poster)))
+        }else{
+            cell.posterImageView.sd_setImage(with: URL(string: Constants.Image.posterPlaceholder))
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "MovieDetailViewController") as? MovieDetailViewController else { return }
+        
+        let movie = similarMovies[indexPath.item]
+        vc.movieId = movie.id.stringValue
+        
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
