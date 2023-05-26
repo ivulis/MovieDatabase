@@ -141,7 +141,6 @@ extension WatchlistViewController: UITableViewDelegate, UITableViewDataSource {
             cell.posterImageView.sd_setImage(with: URL(string: Constants.Image.posterPlaceholder))
         }
         cell.checkmarkImageView.isHidden = movie.watched ? false : true
-        cell.tintColor = .yellow
         
         return cell
     }//cellForRowAt

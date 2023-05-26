@@ -37,8 +37,8 @@ class MovieDetailViewController: UIViewController {
         context = appDelegate.persistentContainer.viewContext
         
         checkWatchlist()
-        getMovieDetails()
         getMovieTrailer()
+        getMovieDetails()
     }
     
     @IBAction func addToWatchlistButtonTapped(_ sender: Any) {
