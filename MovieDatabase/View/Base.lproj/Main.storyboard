@@ -320,16 +320,27 @@
                                                         <constraint firstAttribute="height" constant="150" id="uAP-DT-cgU"/>
                                                     </constraints>
                                                 </imageView>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dL9-I9-bxH">
+                                                    <rect key="frame" x="323" y="63.333333333333329" width="50" height="46"/>
+                                                    <color key="tintColor" systemColor="systemYellowColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="gWP-0q-22c"/>
+                                                        <constraint firstAttribute="width" constant="50" id="kgu-1K-f1K"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="LNu-9m-4E0" firstAttribute="trailing" secondItem="stE-Rs-e6k" secondAttribute="trailingMargin" id="EUV-pp-byv"/>
+                                                <constraint firstAttribute="trailing" secondItem="dL9-I9-bxH" secondAttribute="trailing" constant="20" symbolic="YES" id="2DD-t8-4vN"/>
+                                                <constraint firstItem="LNu-9m-4E0" firstAttribute="trailing" secondItem="stE-Rs-e6k" secondAttribute="trailingMargin" id="4yD-Vh-oaH"/>
                                                 <constraint firstItem="YhW-LT-yom" firstAttribute="top" secondItem="stE-Rs-e6k" secondAttribute="topMargin" id="EYp-Aj-DJe"/>
                                                 <constraint firstItem="YhW-LT-yom" firstAttribute="leading" secondItem="stE-Rs-e6k" secondAttribute="leadingMargin" id="Ohv-qE-GbF"/>
                                                 <constraint firstItem="LNu-9m-4E0" firstAttribute="centerY" secondItem="stE-Rs-e6k" secondAttribute="centerY" id="bZj-fz-5v9"/>
+                                                <constraint firstItem="dL9-I9-bxH" firstAttribute="centerY" secondItem="stE-Rs-e6k" secondAttribute="centerY" id="hpc-an-hVw"/>
                                                 <constraint firstItem="LNu-9m-4E0" firstAttribute="leading" secondItem="YhW-LT-yom" secondAttribute="trailing" constant="8" symbolic="YES" id="wpG-M8-dyA"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="checkmarkImageView" destination="dL9-I9-bxH" id="Fe3-FK-5fx"/>
                                             <outlet property="posterImageView" destination="YhW-LT-yom" id="eDS-L6-jr8"/>
                                             <outlet property="ratingLabel" destination="P6h-TX-R0V" id="ePD-zY-B6z"/>
                                             <outlet property="releaseDateLabel" destination="bA0-GP-Gzp" id="Ru8-X9-TLA"/>
@@ -646,6 +657,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="gearshape.fill" catalog="system" width="128" height="123"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>

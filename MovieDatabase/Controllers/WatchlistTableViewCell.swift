@@ -14,5 +14,5 @@ class WatchlistTableViewCell: UITableViewCell {
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var runtimeLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
-    
+    @IBOutlet weak var checkmarkImageView: UIImageView!
 }
